@@ -23,7 +23,7 @@ public class NoteForm {
     }
 
     public Integer getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public void setUserId(Integer userId) {
