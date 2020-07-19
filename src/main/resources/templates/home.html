@@ -177,7 +177,7 @@
                         <tbody th:each= "credential: ${credentials}">
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-success">Edit</button>
+                                <button type="button" class="btn btn-success"  th:onclick="javascript:editCredentialModel([[${credential}]])">Edit</button>
                                 <form action= "#" th:action="@{home/deleteCredential}" method="POST">
                                     <input type= "hidden" name= "credentialId" th:value="*{credential.credentialId}">
                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -230,6 +230,51 @@
     </div>
 </div>
 
+<div class="modal fade" id="editCredentialModal" tabindex="-1" role="dialog"
+     aria-labelledby="credentialModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCredentialModalLabel">Credential</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#"  method="POST" th:action="@{/home/editCredential}">
+                    <input type="hidden" name="credentialId" id="editCredential-id">
+                    <div class="form-group">
+                        <label for="editCredential-url" class="col-form-label">URL</label>
+                        <input type="text" name="url" class="form-control" id="editCredential-url"
+                               maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCredential-username" class="col-form-label">Username</label>
+                        <input type="text" name="username" class="form-control"
+                               id="editCredential-username"
+                               maxlength="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCredential-password" class="col-form-label">Password</label>
+                        <input type="text" name="password" class="form-control"
+                               id="editCredential-password"
+                               maxlength="30" required>
+                    </div>
+                    <button id="editCredentialSubmit" type="submit" class="d-none"></button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editCredentialSaveButton"
+                        onclick="$('#editCredentialSubmit').click();">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script th:src="@{/js/jquery-slim.min.js}"></script>
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
@@ -258,6 +303,16 @@
             $('#editNote-title').val(note.noteTitle ? note.noteTitle : '');
             $('#editNote-description').val(note.noteDescription ? note.noteDescription : '');
             $('#editnoteModal').modal('show');
+        }
+
+        function editCredentialModel(credential) {
+
+            $('#editCredential-id').val(credential.credentialId ? credential.credentialId : '');
+            $('#editCredential-url').val(credential.url ? credential.url : '');
+            $('#editCredential-username').val(credential.username ? credential.username : '');
+            $('#editCredential-password').val(credential.password ? credential.password : '');
+            $('#editCredentialModal').modal('show');
+
         }
         </script>
 </body>

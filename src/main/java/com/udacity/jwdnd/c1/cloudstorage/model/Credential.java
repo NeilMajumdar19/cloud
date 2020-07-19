@@ -1,5 +1,9 @@
 package com.udacity.jwdnd.c1.cloudstorage.model;
 
+import com.udacity.jwdnd.c1.cloudstorage.service.EncryptionService;
+
+import javax.annotation.PostConstruct;
+
 public class Credential {
 
     private Integer credentialId;
@@ -8,6 +12,17 @@ public class Credential {
     private String key;
     private String password;
     private Integer userId;
+    private String decryptedPassword;
+    private EncryptionService encryptionService;
+
+
+    @PostConstruct
+    public void postConstruct()
+    {
+        encryptionService = new EncryptionService();
+        decryptedPassword = encryptionService.decryptValue(password, key);
+
+    }
 
     public Integer getCredentialId() {
         return credentialId;

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
+
 @Controller
 @RequestMapping("/home")
 public class HomeController {
@@ -88,6 +90,14 @@ public class HomeController {
     public String deleteCredential(Credential credential, Model model)
     {
         credentialService.deleteCredential(credential.getCredentialId());
+        model.addAttribute("credentials", credentialService.getCredentials(credential.getUserId()));
+        return "result";
+    }
+
+    @PostMapping("/editCredential")
+    public String editCredential(Credential credential, Model model)
+    {
+        credentialService.editCredential(credential);
         model.addAttribute("credentials", credentialService.getCredentials(credential.getUserId()));
         return "result";
     }
