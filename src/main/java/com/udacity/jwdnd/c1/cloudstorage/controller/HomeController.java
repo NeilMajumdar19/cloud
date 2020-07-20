@@ -1,20 +1,19 @@
 package com.udacity.jwdnd.c1.cloudstorage.controller;
 
+import com.udacity.jwdnd.c1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.c1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.c1.cloudstorage.model.CredentialForm;
 import com.udacity.jwdnd.c1.cloudstorage.model.Note;
 import com.udacity.jwdnd.c1.cloudstorage.model.NoteForm;
-import com.udacity.jwdnd.c1.cloudstorage.service.CredentialService;
-import com.udacity.jwdnd.c1.cloudstorage.service.NoteService;
-import com.udacity.jwdnd.c1.cloudstorage.service.UserService;
+import com.udacity.jwdnd.c1.cloudstorage.service.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/home")
@@ -23,11 +22,17 @@ public class HomeController {
     private NoteService noteService;
     private UserService userService;
     private CredentialService credentialService;
+    private FileService fileService;
+    private EncryptionService encryptionService;
+    private CredentialMapper credentialMapper;
 
-    public HomeController(NoteService noteService, CredentialService credentialService, UserService userService) {
+    public HomeController(NoteService noteService, CredentialService credentialService, FileService fileService, EncryptionService encryptionService, UserService userService, CredentialMapper credentialMapper) {
         this.noteService = noteService;
         this.credentialService = credentialService;
+        this.fileService = fileService;
+        this.encryptionService = encryptionService;
         this.userService = userService;
+        this.credentialMapper = credentialMapper;
 
     }
 
@@ -36,6 +41,7 @@ public class HomeController {
     {
         model.addAttribute("notes", noteService.getNotes(userService.getUser(authentication.getName()).getUserId()));
         model.addAttribute("credentials", credentialService.getCredentials(userService.getUser(authentication.getName()).getUserId()));
+        model.addAttribute("files", fileService.getFiles(userService.getUser(authentication.getName()).getUserId()));
         return "home";
     }
 
@@ -101,6 +107,28 @@ public class HomeController {
         model.addAttribute("credentials", credentialService.getCredentials(credential.getUserId()));
         return "result";
     }
+
+   @GetMapping(value = "/getDecryptedCredential")
+   @ResponseBody
+    public String getDecryptedCredential(@RequestParam Integer credentialId){
+
+        Credential credential = credentialMapper.getCredential(credentialId);
+        return encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+
+    }
+
+    @PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("fileUpload")MultipartFile fileUpload, Authentication authentication, Model model) throws IOException {
+        boolean editError = false;
+        Integer userId = userService.getUser(authentication.getName()).getUserId();
+        int rowsAdded = fileService.uploadFile(fileUpload, userId);
+        if(rowsAdded < 0)
+            editError = true;
+        model.addAttribute("files", fileService.getFiles(userId));
+        model.addAttribute("editError", editError);
+        return "result";
+    }
+
 
 
 }

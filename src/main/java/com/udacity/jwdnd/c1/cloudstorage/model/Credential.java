@@ -12,17 +12,8 @@ public class Credential {
     private String key;
     private String password;
     private Integer userId;
-    private String decryptedPassword;
-    private EncryptionService encryptionService;
 
 
-    @PostConstruct
-    public void postConstruct()
-    {
-        encryptionService = new EncryptionService();
-        decryptedPassword = encryptionService.decryptValue(password, key);
-
-    }
 
     public Integer getCredentialId() {
         return credentialId;
