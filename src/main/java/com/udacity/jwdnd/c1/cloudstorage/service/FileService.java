@@ -27,6 +27,11 @@ public class FileService {
         return fileMapper.uploadFile(newFile);
     }
 
+    public void deleteFile(Integer fileId)
+    {
+        fileMapper.deleteFile(fileId);
+    }
+
     public List<File> getFiles(Integer userId)
     {
         return fileMapper.getAllFiles(userId);
@@ -35,5 +40,10 @@ public class FileService {
     public boolean fileNameExists(String fileName)
     {
         return fileMapper.getFile(fileName) != null;
+    }
+
+    public File getFile(String filename)
+    {
+        return fileMapper.getFile(filename);
     }
 }
