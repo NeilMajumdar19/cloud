@@ -120,12 +120,29 @@ public class HomeController {
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestParam("fileUpload")MultipartFile fileUpload, Authentication authentication, Model model) throws IOException {
         boolean editError = false;
+        boolean fileExists = false;
+        boolean fileNotChosen = false;
         Integer userId = userService.getUser(authentication.getName()).getUserId();
-        int rowsAdded = fileService.uploadFile(fileUpload, userId);
-        if(rowsAdded < 0)
+        if(fileUpload.getSize() == 0)
+        {
+            fileNotChosen = true;
+        }
+
+        else if(fileService.fileNameExists(fileUpload.getOriginalFilename()))
+        {
             editError = true;
+            fileExists = true;
+        }
+        else
+        {
+            int rowsAdded = fileService.uploadFile(fileUpload, userId);
+            if(rowsAdded < 0)
+                editError = true;
+        }
         model.addAttribute("files", fileService.getFiles(userId));
         model.addAttribute("editError", editError);
+        model.addAttribute("fileExists", fileExists);
+        model.addAttribute("fileNotChosen", fileNotChosen);
         return "result";
     }
 

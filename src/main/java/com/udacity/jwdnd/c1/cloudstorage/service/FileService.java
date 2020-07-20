@@ -31,4 +31,9 @@ public class FileService {
     {
         return fileMapper.getAllFiles(userId);
     }
+
+    public boolean fileNameExists(String fileName)
+    {
+        return fileMapper.getFile(fileName) != null;
+    }
 }
