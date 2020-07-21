@@ -312,7 +312,8 @@
 
         async function fetchDecodedPassword(credentialId)
        {
-            let response = await fetch(`http://localhost:8080/getDecryptedCredential?credentialId=${credentialId}`);
+            let port = location.port;
+            let response = await fetch(`http://localhost:${port}/home/getDecryptedCredential?credentialId=${credentialId}`);
 
             if (response.ok) {
                 let data = await response.json();
@@ -327,12 +328,12 @@
 
         }
 
-        function editCredentialModel(credential) {
+        async function editCredentialModel(credential) {
 
             $('#editCredential-id').val(credential.credentialId ? credential.credentialId : '');
             $('#editCredential-url').val(credential.url ? credential.url : '');
             $('#editCredential-username').val(credential.username ? credential.username : '');
-            $('#editCredential-password').val(credential.password ? fetchDecodedPassword(credential.credentialId) : '');
+            $('#editCredential-password').val(credential.password ? await fetchDecodedPassword(credential.credentialId) : '');
             $('#editCredentialModal').modal('show');
 
         }
