@@ -36,6 +36,16 @@ public class CredentialService {
         return credentialMapper.insert(newCredential);
     }
 
+    public Credential getCredential(Integer credentialId)
+    {
+        return credentialMapper.getCredential(credentialId);
+    }
+
+    public String decryptPassword(Credential credential)
+    {
+        return encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+    }
+
     public void deleteCredential(Integer credentialId)
     {
         credentialMapper.deleteCredential(credentialId);

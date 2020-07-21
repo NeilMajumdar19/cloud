@@ -310,12 +310,29 @@
             $('#editnoteModal').modal('show');
         }
 
+        async function fetchDecodedPassword(credentialId)
+       {
+            let response = await fetch(`http://localhost:8080/getDecryptedCredential?credentialId=${credentialId}`);
+
+            if (response.ok) {
+                let data = await response.json();
+                let resultData = JSON.parse(JSON.stringify(data));
+                return resultData.decryptedPassword;
+
+            }
+
+            else {
+                    alert("HTTP-Error: " + response.status);
+                   }
+
+        }
+
         function editCredentialModel(credential) {
 
             $('#editCredential-id').val(credential.credentialId ? credential.credentialId : '');
             $('#editCredential-url').val(credential.url ? credential.url : '');
             $('#editCredential-username').val(credential.username ? credential.username : '');
-            $('#editCredential-password').val(credential.password ? credential.password : '');
+            $('#editCredential-password').val(credential.password ? fetchDecodedPassword(credential.credentialId) : '');
             $('#editCredentialModal').modal('show');
 
         }

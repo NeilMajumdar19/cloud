@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.swing.text.Document;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
@@ -26,16 +28,15 @@ public class HomeController {
     private UserService userService;
     private CredentialService credentialService;
     private FileService fileService;
-    private EncryptionService encryptionService;
-    private CredentialMapper credentialMapper;
 
-    public HomeController(NoteService noteService, CredentialService credentialService, FileService fileService, EncryptionService encryptionService, UserService userService, CredentialMapper credentialMapper) {
+
+
+    public HomeController(NoteService noteService, CredentialService credentialService, FileService fileService, UserService userService) {
         this.noteService = noteService;
         this.credentialService = credentialService;
         this.fileService = fileService;
-        this.encryptionService = encryptionService;
         this.userService = userService;
-        this.credentialMapper = credentialMapper;
+
 
     }
 
@@ -123,12 +124,16 @@ public class HomeController {
         return "result";
     }
 
-   @GetMapping(value = "/getDecryptedCredential")
+   @GetMapping(value = "/getDecryptedCredential", produces = MediaType.APPLICATION_JSON_VALUE)
    @ResponseBody
-    public String getDecryptedCredential(@RequestParam Integer credentialId){
+    public Map<String, String> getDecryptedCredential(@RequestParam Integer credentialId){
 
-        Credential credential = credentialMapper.getCredential(credentialId);
-        return encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+        Credential credential = credentialService.getCredential(credentialId);
+        String decryptedPassword = credentialService.decryptPassword(credential);
+        Map<String, String> map = new HashMap();
+        map.put("encryptedPassword", credential.getPassword());
+        map.put("decryptedPassword", decryptedPassword);
+        return map;
 
     }
 
