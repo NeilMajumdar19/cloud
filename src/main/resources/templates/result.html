@@ -12,12 +12,12 @@
 <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
     <div class="alert alert-success fill-parent" th:unless= "${editError}">
         <h1 class="display-5" th:unless= "${editError}">Success</h1>
-        <span th:unless= "${editError}">Your changes were successfully saved. Click <a th:href= "@{/home}">here</a> to continue.</span>
+        <span th:unless= "${editError}">Your changes were successfully saved. Click <a id = "cont-link-success" th:href= "@{/home}">here</a> to continue.</span>
     </div>
     <div class="alert alert-danger fill-parent" th:if= "${editError}">
         <h1 class="display-5" th:if= "${editError}">Error</h1>
         <span th:if= "${editError}" th:text= "${errorMsg}">Your changes were not saved. Click <a th:href= "@{/home}">here</a> to continue.</span>
-        <span th:if= "${editError}">Click <a th:href= "@{/home}">here</a> to continue.</span>
+        <span th:if= "${editError}">Click <a id = "cont-link-failure" th:href= "@{/home}">here</a> to continue.</span>
     </div>
 
 

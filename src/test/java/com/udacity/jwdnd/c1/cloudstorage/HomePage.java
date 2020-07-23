@@ -10,6 +10,12 @@ public class HomePage {
     @FindBy(id = "logout-button")
     private WebElement logoutButton;
 
+    @FindBy(id = "nav-notes-tab")
+    private WebElement notesTab;
+
+    @FindBy(id = "nav-credentials-tab")
+    private WebElement credentialsTab;
+
     public HomePage(WebDriver driver)
     {
         PageFactory.initElements(driver, this);
@@ -18,5 +24,19 @@ public class HomePage {
     public void logout()
     {
         logoutButton.click();
+    }
+
+    public WebElement getNotesTab() {
+        return notesTab;
+    }
+
+    public void goToNotes()
+    {
+        notesTab.click();
+    }
+
+    public void goToCredentials()
+    {
+        credentialsTab.click();
     }
 }
