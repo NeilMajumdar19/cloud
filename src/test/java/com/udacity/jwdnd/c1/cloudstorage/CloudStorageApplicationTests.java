@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -44,7 +45,7 @@ class CloudStorageApplicationTests {
     public void beforeEach()
     {
         username = "Russ";
-        password = "ballsdeep69";
+        password = "majumdar19";
         driver.get("http://localhost:" + port + "/signup");
         SignupPage signupPage = new SignupPage(driver);
         signupPage.signupUser("Russell", "Westbrook", username, password);
@@ -88,8 +89,8 @@ class CloudStorageApplicationTests {
     public void testCreateNote() throws InterruptedException {
 
 
-        String title = "Jon Jones";
-        String description = "is the goat";
+        String title = "Neil";
+        String description = "Majumdar";
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginUser(username, password);
@@ -99,25 +100,19 @@ class CloudStorageApplicationTests {
         WebElement notesTab = homePage.getNotesTab();
         wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
 
-        WebDriverWait wait1 = new WebDriverWait(driver, 10);
-        HomeNotesPage notesPage = new HomeNotesPage(driver);
-        WebElement addButton = notesPage.getAddNoteButton();
-        wait1.until(ExpectedConditions.elementToBeClickable(addButton)).click();
 
-        Thread.sleep(5000);
-        notesPage.enterTitle(title);
-        Thread.sleep(5000);
-        notesPage.enterDescription(description);
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("notes-button"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note-title"))).sendKeys(title);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note-description"))).sendKeys(description);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("save-button"))).click();
 
-        WebDriverWait wait2 = new WebDriverWait(driver, 10);
-        ResultPage resultPage = new ResultPage(driver);
-        WebElement continueLink = resultPage.getContinueLinkSuccess();
-        wait2.until(ExpectedConditions.elementToBeClickable(continueLink)).click();
+        driver.get("http://localhost:" + port + "/home");
 
-        homePage.goToNotes();
-        assertEquals(title, notesPage.getDisplayedTitle());
-        assertEquals(description, notesPage.getDisplayedDescription());
+        wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
+        String actualTitle = wait.until(ExpectedConditions.elementToBeClickable(By.id("title-display"))).getText();
+        String actualDescription = wait.until(ExpectedConditions.elementToBeClickable(By.id("description-display"))).getText();
+        assertEquals(title, actualTitle);
+        assertEquals(description, actualDescription);
 
     }
 
