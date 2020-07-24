@@ -59,7 +59,7 @@ public class HomeController {
         if(rowsAdded < 0)
         {
             editError = true;
-            errorMsg = "Your changes were not saved.";
+            errorMsg = "Your changes were not saved. Try again.";
         }
 
         noteForm.setNoteTitle("");
@@ -73,17 +73,34 @@ public class HomeController {
     @PostMapping("/deleteNote")
     public String deleteNote(Note note, Model model)
     {
-
-        noteService.deleteNote(note.getNoteId());
+        boolean editError = false;
+        String errorMsg = "";
+        int rowsDeleted = noteService.deleteNote(note.getNoteId());
+        if(rowsDeleted < 0)
+        {
+            editError = true;
+            errorMsg = "Your changes were not saved. Try again.";
+        }
         model.addAttribute("notes", noteService.getNotes(note.getUserId()));
+        model.addAttribute("editError", editError);
+        model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
 
     @PostMapping("/editNote")
     public String editNote(Note note, Model model)
     {
-        noteService.editNote(note);
+        boolean editError = false;
+        String errorMsg = "";
+        int rowsEdited = noteService.editNote(note);
+        if(rowsEdited < 0)
+        {
+            editError = true;
+            errorMsg = "Your changes were not saved. Try again.";
+        }
         model.addAttribute("notes", noteService.getNotes(note.getUserId()));
+        model.addAttribute("editError", editError);
+        model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
 
@@ -97,7 +114,7 @@ public class HomeController {
         if(rowsAdded < 0)
         {
             editError = true;
-            errorMsg = "Your changes were not saved.";
+            errorMsg = "Your changes were not saved. Try again";
         }
         credentialForm.setUrl("");
         credentialForm.setUsername("");
@@ -111,16 +128,34 @@ public class HomeController {
     @PostMapping("/deleteCredential")
     public String deleteCredential(Credential credential, Model model)
     {
-        credentialService.deleteCredential(credential.getCredentialId());
+        boolean editError = false;
+        String errorMsg = "";
+        int rowsDeleted = credentialService.deleteCredential(credential.getCredentialId());
+        if(rowsDeleted < 0)
+        {
+            editError = true;
+            errorMsg = "Your changes were not saved. Try again";
+        }
         model.addAttribute("credentials", credentialService.getCredentials(credential.getUserId()));
+        model.addAttribute("editError", editError);
+        model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
 
     @PostMapping("/editCredential")
     public String editCredential(Credential credential, Model model)
     {
-        credentialService.editCredential(credential);
+        boolean editError = false;
+        String errorMsg = "";
+        int rowsEdited = credentialService.editCredential(credential);
+        if(rowsEdited < 0)
+        {
+            editError = true;
+            errorMsg = "Your changes were not saved. Try again";
+        }
         model.addAttribute("credentials", credentialService.getCredentials(credential.getUserId()));
+        model.addAttribute("editError", editError);
+        model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
 
@@ -158,7 +193,7 @@ public class HomeController {
             int rowsAdded = fileService.uploadFile(fileUpload, userId);
             if(rowsAdded < 0) {
                 editError = true;
-                errorMsg = "Your changes were not saved.";
+                errorMsg = "Your changes were not saved. Try again.";
             }
         }
         model.addAttribute("files", fileService.getFiles(userId));
@@ -170,9 +205,17 @@ public class HomeController {
     @PostMapping("/deleteFile")
     public String deleteFile(File file, Model model)
     {
-        fileService.deleteFile(file.getFileId());
+        boolean editError = false;
+        String errorMsg = "";
+        int rowsDeleted = fileService.deleteFile(file.getFileId());
+        if(rowsDeleted < 0)
+        {
+            editError = true;
+            errorMsg = "Your changes were not saved. Try again.";
+        }
         model.addAttribute("files", fileService.getFiles(file.getUserId()));
-        model.addAttribute("fileNotChosen", false);
+        model.addAttribute("editError", editError);
+        model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
 

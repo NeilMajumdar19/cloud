@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,8 +14,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -86,16 +87,18 @@ class CloudStorageApplicationTests {
     }
 
     @Test
-    public void testCreateNote() throws InterruptedException {
+    public void testCreateEditDeleteNote() throws InterruptedException {
 
 
         String title = "Neil";
         String description = "Majumdar";
+        String title2 = "Skip";
+        String description2 = "Bayless";
 
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginUser(username, password);
 
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 100);
         HomePage homePage = new HomePage(driver);
         WebElement notesTab = homePage.getNotesTab();
         wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
@@ -113,6 +116,32 @@ class CloudStorageApplicationTests {
         String actualDescription = wait.until(ExpectedConditions.elementToBeClickable(By.id("description-display"))).getText();
         assertEquals(title, actualTitle);
         assertEquals(description, actualDescription);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-title"))).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-title"))).sendKeys(title2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-description"))).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-description"))).sendKeys(description2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editNoteSaveButton"))).click();
+
+        driver.get("http://localhost:" + port + "/home");
+
+        wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
+        actualTitle = wait.until(ExpectedConditions.elementToBeClickable(By.id("title-display"))).getText();
+        actualDescription = wait.until(ExpectedConditions.elementToBeClickable(By.id("description-display"))).getText();
+        assertEquals(title2, actualTitle);
+        assertEquals(description2, actualDescription);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNote"))).click();
+
+        driver.get("http://localhost:" + port + "/home");
+
+        wait.until(ExpectedConditions.elementToBeClickable(notesTab)).click();
+
+        assertThrows(NoSuchElementException.class, homePage::getDisplayedTitle);
+        assertThrows(NoSuchElementException.class, homePage::getDisplayedDescription);
+
+
 
     }
 

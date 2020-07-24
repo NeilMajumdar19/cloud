@@ -82,10 +82,10 @@
                         <tbody th:each= "note: ${notes}">
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-success" th:onclick="javascript:editNoteModel([[${note}]])">Edit</button>
+                                <button type="button" id= "editNote" class="btn btn-success" th:onclick="javascript:editNoteModel([[${note}]])">Edit</button>
                                 <form action= "#" th:action="@{home/deleteNote}" method="POST">
                                     <input type= "hidden" name= "noteId" th:value="*{note.noteId}">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" id= "deleteNote" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
                             <th scope="row" id= "title-display" th:text= "${note.getNoteTitle()}">Example Note Title</th>

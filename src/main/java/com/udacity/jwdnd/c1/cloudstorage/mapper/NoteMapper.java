@@ -16,10 +16,10 @@ public interface NoteMapper {
     public List<Note> getAllNotes(Integer userId);
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteId}")
-    public void deleteNote(Integer noteId);
+    public int deleteNote(Integer noteId);
 
     @Update("UPDATE NOTES SET notetitle = #{noteTitle}, notedescription = #{noteDescription} WHERE noteid = #{noteId}")
-    public void editNote(Note note);
+    public int editNote(Note note);
 
 
 }

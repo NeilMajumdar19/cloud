@@ -46,12 +46,12 @@ public class CredentialService {
         return encryptionService.decryptValue(credential.getPassword(), credential.getKey());
     }
 
-    public void deleteCredential(Integer credentialId)
+    public int deleteCredential(Integer credentialId)
     {
-        credentialMapper.deleteCredential(credentialId);
+        return credentialMapper.deleteCredential(credentialId);
     }
 
-    public void editCredential(Credential credential)
+    public int editCredential(Credential credential)
     {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
@@ -60,7 +60,7 @@ public class CredentialService {
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
         credential.setKey(encodedKey);
         credential.setPassword(encryptedPassword);
-        credentialMapper.editCredential(credential);
+        return credentialMapper.editCredential(credential);
     }
 
     public List<Credential> getCredentials(Integer userId)

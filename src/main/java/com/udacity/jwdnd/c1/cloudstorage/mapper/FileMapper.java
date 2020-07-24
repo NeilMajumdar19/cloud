@@ -23,7 +23,7 @@ public interface FileMapper {
     public File getFile(String fileName);
 
     @Delete("DELETE FROM FILES WHERE fileId = #{fileId}")
-    public void deleteFile(Integer fileId);
+    public int deleteFile(Integer fileId);
 
 
 

@@ -19,10 +19,10 @@ public interface CredentialMapper {
     public Credential getCredential(Integer credentialId);
 
     @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId}")
-    public void deleteCredential(Integer credentialId);
+    public int deleteCredential(Integer credentialId);
 
     @Update("UPDATE CREDENTIALS SET url = #{url}, username = #{username}, key = #{key}, password = #{password} WHERE credentialid = #{credentialId}")
-    public void editCredential(Credential credential);
+    public int editCredential(Credential credential);
 
 
 }

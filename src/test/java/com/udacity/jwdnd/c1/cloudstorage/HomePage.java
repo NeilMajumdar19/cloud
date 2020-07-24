@@ -16,6 +16,12 @@ public class HomePage {
     @FindBy(id = "nav-credentials-tab")
     private WebElement credentialsTab;
 
+    @FindBy(id = "title-display")
+    private WebElement titleDisplay;
+
+    @FindBy(id = "description-display")
+    private WebElement descriptionDisplay;
+
     public HomePage(WebDriver driver)
     {
         PageFactory.initElements(driver, this);
@@ -39,4 +45,15 @@ public class HomePage {
     {
         credentialsTab.click();
     }
+
+    public String getDisplayedTitle()
+    {
+        return titleDisplay.getText();
+    }
+
+    public String getDisplayedDescription()
+    {
+        return descriptionDisplay.getText();
+    }
+
 }

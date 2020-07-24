@@ -27,9 +27,9 @@ public class FileService {
         return fileMapper.uploadFile(newFile);
     }
 
-    public void deleteFile(Integer fileId)
+    public int deleteFile(Integer fileId)
     {
-        fileMapper.deleteFile(fileId);
+        return fileMapper.deleteFile(fileId);
     }
 
     public List<File> getFiles(Integer userId)
