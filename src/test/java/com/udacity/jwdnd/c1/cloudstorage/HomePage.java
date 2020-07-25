@@ -22,6 +22,16 @@ public class HomePage {
     @FindBy(id = "description-display")
     private WebElement descriptionDisplay;
 
+    @FindBy(id = "url-display")
+    private WebElement urlDisplay;
+
+    @FindBy(id = "username-display")
+    private WebElement usernameDisplay;
+
+    @FindBy(id = "password-display")
+    private WebElement passwordDisplay;
+
+
     public HomePage(WebDriver driver)
     {
         PageFactory.initElements(driver, this);
@@ -36,14 +46,8 @@ public class HomePage {
         return notesTab;
     }
 
-    public void goToNotes()
-    {
-        notesTab.click();
-    }
-
-    public void goToCredentials()
-    {
-        credentialsTab.click();
+    public WebElement getCredentialsTab() {
+        return credentialsTab;
     }
 
     public String getDisplayedTitle()
@@ -54,6 +58,21 @@ public class HomePage {
     public String getDisplayedDescription()
     {
         return descriptionDisplay.getText();
+    }
+
+    public String getDisplayedUrl()
+    {
+        return urlDisplay.getText();
+    }
+
+    public String getDisplayedUsername()
+    {
+        return usernameDisplay.getText();
+    }
+
+    public String getDisplayedPassword()
+    {
+        return passwordDisplay.getText();
     }
 
 }

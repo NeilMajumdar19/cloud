@@ -143,7 +143,47 @@ class CloudStorageApplicationTests {
 
 
 
+
+
     }
+
+    @Test
+    public void testCreateEditDeleteCredential()
+    {
+        String url = "google.com";
+        String url2 = "localhost:8080/home";
+        String username2 = "Bob50";
+        String password2 = "cs149";
+
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.loginUser(username, password);
+
+        WebDriverWait wait = new WebDriverWait(driver, 100);
+        HomePage homePage = new HomePage(driver);
+        WebElement credentialsTab = homePage.getCredentialsTab();
+        wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("creds-button"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("credential-url"))).sendKeys(url);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("credential-username"))).sendKeys(username);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("credential-password"))).sendKeys(password);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("save-cred"))).click();
+
+        driver.get("http://localhost:" + port + "/home");
+
+        wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();
+        String actualUrl = wait.until(ExpectedConditions.elementToBeClickable(By.id("url-display"))).getText();
+        String actualUsername = wait.until(ExpectedConditions.elementToBeClickable(By.id("username-display"))).getText();
+        String actualPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("password-display"))).getText();
+        assertEquals(url, actualUrl);
+        assertEquals(username, actualUsername);
+        assertNotEquals(password, actualPassword);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCred"))).click();
+        String decryptedPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).getText();
+        assertEquals(password, decryptedPassword);
+    }
+
 
 
 
