@@ -10,7 +10,7 @@
 </head>
 <body class="p-3 mb-2 bg-light text-black">
 <div class="container">
-    <div id="logoutDiv">
+    <div id="logoutDiv"> <!-- got logout from https://www.codejava.net/frameworks/spring-boot/spring-boot-security-customize-login-and-logout -->
         <form action="#" th:action= "@{/doLogout}" method="POST">
             <button type="submit" class="btn btn-secondary float-right" id= "logout-button">Logout</button>
         </form>
@@ -95,6 +95,7 @@
                     </table>
                 </div>
 
+                <!-- got modal code from Veranicus github repo -->
                 <div class="modal fade" id="editnoteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -196,6 +197,7 @@
                     </table>
                 </div>
 
+                <!-- got modal code from Veranicus github repo -->
                 <div class="modal fade" id="credentialModal" tabindex="-1" role="dialog" aria-labelledby="credentialModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -303,6 +305,7 @@
                 $('#credentialModal').modal('show');
             }
 
+            //got modal code from Veranicus github repo
             function editNoteModel(note) {
             $('#editNote-id').val(note.noteId ? note.noteId : '');
             $('#editNote-title').val(note.noteTitle ? note.noteTitle : '');
@@ -328,6 +331,7 @@
 
         }
 
+        // got part of modal code from Veranicus github repo
         async function editCredentialModel(credential) {
 
             $('#editCredential-id').val(credential.credentialId ? credential.credentialId : '');

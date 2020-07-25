@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .defaultSuccessUrl("/home", true);
-
+        //got logout from https://www.codejava.net/frameworks/spring-boot/spring-boot-security-customize-login-and-logout
         http.logout()
                 .logoutUrl("/doLogout");
 
