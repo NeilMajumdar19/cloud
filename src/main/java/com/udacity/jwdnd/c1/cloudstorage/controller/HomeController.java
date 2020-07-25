@@ -183,7 +183,7 @@ public class HomeController {
             errorMsg = "File not chosen.";
         }
 
-        else if(fileService.fileNameExists(fileUpload.getOriginalFilename()))
+        else if(fileService.fileNameExists(fileUpload.getOriginalFilename(), userId))
         {
             editError = true;
             errorMsg = "Cannot upload more than one file with the same name.";
@@ -221,8 +221,9 @@ public class HomeController {
 
     //got from udacity forum from Sahil
     @GetMapping("/download/{filename:.+}/db")
-    public ResponseEntity downloadFromDB(@PathVariable(value = "filename") String fileName) {
-        File file = fileService.getFile(fileName);
+    public ResponseEntity downloadFromDB(@PathVariable(value = "filename") String fileName, Authentication authentication) {
+        Integer userId = userService.getUser(authentication.getName()).getUserId();
+        File file = fileService.getFileById(fileName, userId);
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                 .body(file.getFileData());
