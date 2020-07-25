@@ -98,6 +98,7 @@ class CloudStorageApplicationTests {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginUser(username, password);
 
+        //create note
         WebDriverWait wait = new WebDriverWait(driver, 100);
         HomePage homePage = new HomePage(driver);
         WebElement notesTab = homePage.getNotesTab();
@@ -117,6 +118,7 @@ class CloudStorageApplicationTests {
         assertEquals(title, actualTitle);
         assertEquals(description, actualDescription);
 
+        //edit note
         wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote"))).click();
         wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-title"))).clear();
         wait.until(ExpectedConditions.elementToBeClickable(By.id("editNote-title"))).sendKeys(title2);
@@ -132,6 +134,7 @@ class CloudStorageApplicationTests {
         assertEquals(title2, actualTitle);
         assertEquals(description2, actualDescription);
 
+        //delete note
         wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteNote"))).click();
 
         driver.get("http://localhost:" + port + "/home");
@@ -158,6 +161,7 @@ class CloudStorageApplicationTests {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.loginUser(username, password);
 
+        //create credential
         WebDriverWait wait = new WebDriverWait(driver, 100);
         HomePage homePage = new HomePage(driver);
         WebElement credentialsTab = homePage.getCredentialsTab();
@@ -179,9 +183,49 @@ class CloudStorageApplicationTests {
         assertEquals(username, actualUsername);
         assertNotEquals(password, actualPassword);
 
+        //edit credential
         wait.until(ExpectedConditions.elementToBeClickable(By.id("editCred"))).click();
-        String decryptedPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).getText();
+        String decryptedPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).getAttribute("value");
         assertEquals(password, decryptedPassword);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-url"))).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-url"))).sendKeys(url2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-username"))).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-username"))).sendKeys(username2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).clear();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).sendKeys(password2);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredentialSaveButton"))).click();
+
+        driver.get("http://localhost:" + port + "/home");
+
+        wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();
+        actualUrl = wait.until(ExpectedConditions.elementToBeClickable(By.id("url-display"))).getText();
+        actualUsername = wait.until(ExpectedConditions.elementToBeClickable(By.id("username-display"))).getText();
+        actualPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("password-display"))).getText();
+        assertEquals(url2, actualUrl);
+        assertEquals(username2, actualUsername);
+        assertNotEquals(password2, actualPassword);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("editCred"))).click();
+        decryptedPassword = wait.until(ExpectedConditions.elementToBeClickable(By.id("editCredential-password"))).getAttribute("value");
+        assertEquals(password2, decryptedPassword);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("close-button"))).click();
+
+        //delete credential
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("deleteCredential"))).click();
+
+        driver.get("http://localhost:" + port + "/home");
+
+        wait.until(ExpectedConditions.elementToBeClickable(credentialsTab)).click();
+
+        assertThrows(NoSuchElementException.class, homePage::getDisplayedUrl);
+        assertThrows(NoSuchElementException.class, homePage::getDisplayedUsername);
+        assertThrows(NoSuchElementException.class, homePage::getDisplayedPassword);
+
+
+
+
     }
 
 

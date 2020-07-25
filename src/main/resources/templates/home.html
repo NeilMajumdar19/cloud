@@ -185,7 +185,7 @@
                                 <button type="button" id= "editCred" class="btn btn-success"  th:onclick="javascript:editCredentialModel([[${credential}]])">Edit</button>
                                 <form action= "#" th:action="@{home/deleteCredential}" method="POST">
                                     <input type= "hidden" name= "credentialId" th:value="*{credential.credentialId}">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" id= "deleteCredential" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
                             <th scope="row" id= "url-display" th:text= "${credential.getUrl()}">Example Credential URL</th>
@@ -269,7 +269,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" id= "close-button" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="editCredentialSaveButton"
                         onclick="$('#editCredentialSubmit').click();">
                     Save changes
