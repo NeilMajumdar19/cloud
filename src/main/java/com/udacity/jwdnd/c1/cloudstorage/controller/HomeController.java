@@ -158,7 +158,7 @@ public class HomeController {
         model.addAttribute("errorMsg", errorMsg);
         return "result";
     }
-
+    //got from Manjunath on Udacity mentor help
    @GetMapping(value = "/getDecryptedCredential", produces = MediaType.APPLICATION_JSON_VALUE)
    @ResponseBody
     public Map<String, String> getDecryptedCredential(@RequestParam Integer credentialId){
@@ -219,7 +219,7 @@ public class HomeController {
         return "result";
     }
 
-
+    //got from udacity forum from Sahil
     @GetMapping("/download/{filename:.+}/db")
     public ResponseEntity downloadFromDB(@PathVariable(value = "filename") String fileName) {
         File file = fileService.getFile(fileName);
